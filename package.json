@@ -1,0 +1,20 @@
+{
+  "name": "devconnect-backend",
+  "version": "1.0.0",
+  "description": "devConnect-backend",
+  "keywords": [
+    "devConnect",
+    "MERN"
+  ],
+  "license": "ISC",
+  "author": "Sadaan Ansari",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm start",
+    "start": "nodemon index.js" 
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
