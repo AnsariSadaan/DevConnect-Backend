@@ -8,13 +8,19 @@
   ],
   "license": "ISC",
   "author": "Sadaan Ansari",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
+  "main": "src/index.js",
   "scripts": {
     "dev": "npm start",
-    "start": "nodemon index.js" 
+    "start": "nodemon src/index.js"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.1",
+    "validator": "^13.15.0"
   }
 }
