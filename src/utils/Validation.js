@@ -1,14 +1,16 @@
 import validator from 'validator';
+import { ApiError } from './ApiError.js';  // Adjust path if needed
 
-const validateSignUpData = (req)=> {
-    const {firstName, lastName, emailId, password} = req.body;
-    if(!firstName || !lastName){
-        throw new Error("Name is not valid!");
-    }else if(!validator.isEmail(emailId)){
-        throw new Error("Email is not valid!");
-    }else if(!validator.isStrongPassword(password)){
-        throw new Error("Please enter a strog password!");
+const validateSignUpData = (req) => {
+    const { firstName, lastName, emailId, password } = req.body;
+
+    if (!firstName || !lastName) {
+        throw new ApiError(400, "Name is not valid!");
+    } else if (!validator.isEmail(emailId)) {
+        throw new ApiError(400, "Email is not valid!");
+    } else if (!validator.isStrongPassword(password)) {
+        throw new ApiError(400, "Please enter a strong password!");
     }
 };
 
-export { validateSignUpData }
+export { validateSignUpData };
