@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import userRouter from './routes/auth.routes.js';
+import userProfileRouter from './routes/profile.routes.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -15,8 +16,8 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 
 
-app.use('/api/v1/users', userRouter)
-
+app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users', userProfileRouter);
 
 // Global Error Handler
 app.use((err, req, res, next) => {
