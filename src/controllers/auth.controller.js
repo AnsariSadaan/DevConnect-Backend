@@ -10,7 +10,7 @@ const Signup = AsyncHandler(async (req, res) => {
     // validation of data
     validateSignUpData(req);
 
-    const { firstName, lastName, emailId, password, skills } = req.body;
+    const { firstName, lastName, emailId, password, skills, age, gender } = req.body;
 
     //encrypt the password
     const passwordHash = await bcrypt.hash(password, 10);
@@ -22,7 +22,9 @@ const Signup = AsyncHandler(async (req, res) => {
         lastName,
         emailId,
         password: passwordHash,
-        skills
+        skills,
+        age, 
+        gender
     })
 
 
