@@ -3,6 +3,7 @@ import cors from 'cors';
 import userRouter from './routes/auth.routes.js';
 import userProfileRouter from './routes/profile.routes.js';
 import userFeedRouter from './routes/user.routes.js';
+import requestSendReceiveRouter from './routes/request.routes.js';
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -37,6 +38,7 @@ app.use(express.static('public'));
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/users', userProfileRouter);
 app.use('/api/v1/users', userFeedRouter);
+app.use('/api/v1/users', requestSendReceiveRouter)
 
 
 
