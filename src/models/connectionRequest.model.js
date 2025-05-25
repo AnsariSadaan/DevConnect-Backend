@@ -30,6 +30,7 @@ connectionRequestSchema.pre("save", function (next) {
     if(connectionRequest.fromUserId.equals(connectionRequest.toUserId)){
         throw new ApiError(403, "cannot send connection request to yourself")
     }
+    next();
 })
 
 export const ConnectionRequest = mongoose.model("connectionRequest", connectionRequestSchema)
