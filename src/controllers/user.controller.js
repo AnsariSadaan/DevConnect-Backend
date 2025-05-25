@@ -39,7 +39,7 @@ const userRequestsReceived = AsyncHandler(async (req, res) => {
 
 const userConnection = AsyncHandler(async (req, res) => {
     const loggedInUser = req.user;
-    const connectionRequests = ConnectionRequest.find({
+    const connectionRequests = await ConnectionRequest.find({
         $or: [
             { toUserId: loggedInUser._id, status: "accepted" },
             { fromUserId: loggedInUser._id, status: "accepted" },
