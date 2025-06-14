@@ -10,7 +10,7 @@ const Signup = AsyncHandler(async (req, res) => {
     // validation of data
     validateSignUpData(req);
 
-    const { firstName, lastName, emailId, password, skills, age, gender } = req.body;
+    const { firstName, lastName, emailId, password } = req.body;
 
     //encrypt the password
     const passwordHash = await bcrypt.hash(password, 10);
@@ -22,9 +22,6 @@ const Signup = AsyncHandler(async (req, res) => {
         lastName,
         emailId,
         password: passwordHash,
-        skills,
-        age, 
-        gender
     })
 
 
@@ -43,33 +40,6 @@ const Signup = AsyncHandler(async (req, res) => {
 
     return res.status(201).json(new ApiResponse(201, userResponse, "User Added successfully!"));
 })
-
-
-// const Login = AsyncHandler(async (req, res) => {
-
-//     const { emailId, password } = req.body;
-
-//     const user = await User.findOne({ emailId: emailId });
-//     if (!user) {
-//         throw new ApiError(401, "Invalid Credentials!");
-//     }
-
-//     const isPasswordValid = await user.validatePassword(password);
-
-//     if (isPasswordValid) {
-//         const token = await user.getJWT();
-//         res.cookie("token", token, {
-//             expires: new Date(Date.now() + 8 * 3600000),
-//         });
-//         res.send(user);
-//     } else {
-//         throw new ApiError(401, "Invalid Credentials!");
-//     }
-
-//     const userResponse = user.toObject();
-//     delete userResponse.password();
-//     return res.status(200).json(new ApiResponse(200, userResponse, "Login Successfully!"));
-// })
 
 
 const Login = AsyncHandler(async (req, res) => {
