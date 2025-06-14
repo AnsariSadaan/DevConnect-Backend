@@ -9,18 +9,36 @@ const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills";
 const Feed = AsyncHandler(async (req, res) => {
     const loggedInUser = req.user;
 
-    // const hideUsersFromFeed;
+    //find all connection requests involving the logged-in user
+    const sentConnectionrequests = await ConnectionRequest.find({
+        $or: [
+            { fromUserId: loggedInUser._id },
+            { toUserId: loggedInUser._id },
+        ],
+        status: { $in: ["interested", "accepted"] },
+    });
 
-    const user = await User.find({
-        _id: { $ne: loggedInUser._id }
+    // exlcude user from feed who have already send request or accpted
+    const excludedUserIds = new Set();
+    sentConnectionrequests.forEach(req => {
+        excludedUserIds.add(req.fromUserId.toString());
+        excludedUserIds.add(req.toUserId.toString());
     })
-        .select(USER_SAFE_DATA)
 
-    if (!user) {
+    //always exclude logged in user 
+    excludedUserIds.add(loggedInUser._id.toString());
+
+
+    // fecth users not involved in any existing request or connection 
+    const users = await User.find({
+        _id: { $nin: Array.from(excludedUserIds) },
+    }).select(USER_SAFE_DATA)
+
+    if (!users) {
         throw new ApiError(401, "Feeds not found");
     }
 
-    return res.status(200).json(new ApiResponse(200, user, "feed fetched successfully!"));
+    return res.status(200).json(new ApiResponse(200, users, "feed fetched successfully!"));
 })
 
 const userRequestsReceived = AsyncHandler(async (req, res) => {
