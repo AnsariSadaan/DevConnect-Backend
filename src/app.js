@@ -13,21 +13,6 @@ app.use(cors({
     credentials: true,
 }));
 
-// // Optional fallback: manually handle OPTIONS
-// app.use((req, res, next) => {
-//     console.log(`→ ${req.method} ${req.originalUrl}`);
-//     res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
-//     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
-//     res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//     res.setHeader("Access-Control-Allow-Credentials", "true");
-
-//     if (req.method === 'OPTIONS') {
-//         console.log("↪ Preflight (OPTIONS) request received.");
-//         return res.sendStatus(204);
-//     }
-
-//     next();
-// });
 
 app.use(cookieParser());
 app.use(express.json({ limit: '16kb' }));
