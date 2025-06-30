@@ -12,7 +12,8 @@ export const verifyJwt = AsyncHandler(async (req, res, next)=> {
         const {_id} = decodedObj;
         const user = await User.findById(_id);
         if(!user){
-            throw new ApiError(401, "user not found");
+            // throw new ApiError(401, "user not found");
+            return res.status(401).send("Please Login!!");
         } 
         req.user = user;
         next();
