@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
+import  sendEmail  from "../utils/sendEmail.js";
 
 const sendRequest = AsyncHandler(async (req, res)=> {
     const fromUserId = req.user._id;
@@ -37,6 +38,12 @@ const sendRequest = AsyncHandler(async (req, res)=> {
     })
 
     const data = await connectionRequest.save();
+
+    const emailRes = await sendEmail.run(
+        "A new friend request from " + req.user.firstName, 
+        req.user.firstName  + " is " + status + " in " + toUser.firstName
+    );
+    console.log(emailRes);
 
     if(!data){
         throw new ApiError(500, "Failed to create connection request");
