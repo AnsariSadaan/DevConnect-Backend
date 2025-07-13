@@ -5,6 +5,7 @@ import userProfileRouter from './routes/profile.routes.js';
 import userFeedRouter from './routes/user.routes.js';
 import requestSendReceiveRouter from './routes/request.routes.js';
 import cookieParser from 'cookie-parser';
+import './utils/Cronjob.js';
 
 const app = express();
 
