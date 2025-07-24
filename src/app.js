@@ -21,10 +21,10 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 
 
-app.use('/api', userRouter);
-app.use('/api', userProfileRouter);
-app.use('/api', userFeedRouter);
-app.use('/api', requestSendReceiveRouter)
+app.use('/', userRouter);
+app.use('/', userProfileRouter);
+app.use('/', userFeedRouter);
+app.use('/', requestSendReceiveRouter)
 
 
 
