@@ -4,7 +4,6 @@ import userRouter from './routes/auth.routes.js';
 import userProfileRouter from './routes/profile.routes.js';
 import userFeedRouter from './routes/user.routes.js';
 import requestSendReceiveRouter from './routes/request.routes.js';
-// import paymentRouter from './routes/payment.routes.js';
 import cookieParser from 'cookie-parser';
 import './utils/Cronjob.js';
 
@@ -25,7 +24,6 @@ app.use(express.static('public'));
 app.use('/api', userRouter);
 app.use('/api', userProfileRouter);
 app.use('/api', userFeedRouter);
-// app.use('/api', paymentRouter);
 app.use('/api', requestSendReceiveRouter)
 
 
