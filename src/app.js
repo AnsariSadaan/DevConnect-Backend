@@ -3,6 +3,7 @@ import cors from 'cors';
 import userRouter from './routes/auth.routes.js';
 import userProfileRouter from './routes/profile.routes.js';
 import userFeedRouter from './routes/user.routes.js';
+import paymentRouter from './routes/payment.routes.js';
 import requestSendReceiveRouter from './routes/request.routes.js';
 import cookieParser from 'cookie-parser';
 import './utils/Cronjob.js';
@@ -21,10 +22,11 @@ app.use(express.urlencoded({ extended: true, limit: '16kb' }));
 app.use(express.static('public'));
 
 
-app.use('/', userRouter);
-app.use('/', userProfileRouter);
-app.use('/', userFeedRouter);
-app.use('/', requestSendReceiveRouter)
+app.use('/api', userRouter);
+app.use('/api', userProfileRouter);
+app.use('/api', userFeedRouter);
+app.use('/api', requestSendReceiveRouter);
+app.use('/api', paymentRouter);
 
 
 
