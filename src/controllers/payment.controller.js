@@ -1,9 +1,11 @@
+import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils.js";
 import { Payment } from "../models/payment.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { AsyncHandler } from "../utils/AsyncHandler.js";
 import membershipAmount from "../utils/constants.js";
 import razorpayInstance from '../utils/Razorpay.js';
+import { User } from "../models/user.model.js";
 
 const paymentController = AsyncHandler(async (req, res) => {
 
@@ -55,4 +57,39 @@ const paymentController = AsyncHandler(async (req, res) => {
 
 })
 
-export { paymentController };
+const paymentVerifyController = AsyncHandler(async (req, res) => {
+    const webhookSignature = req.headers['X-Razorpay-Signature']
+    const isWebhokkValid = validateWebhookSignature(JSON.stringify(req.body), webhookSignature, process.env.RAZORPAY_WEBHOOK_SECRET);
+
+    if (!isWebhokkValid) {
+        throw new ApiError(400, "WebHook Signature is invalid");
+    }
+
+    console.log(req.body);
+    const paymentDetails = req.body.payload.payment.entity;
+
+    //update the payment in db
+    const payment = await Payment.findOne({orderId: paymentDetails.order_id})
+    payment.status = paymentDetails.status;
+    await payment.save();
+
+    const user = await User.findOne({_id: payment.userId});
+    user.isPremium = true;
+    user.membershipType = payment.notes.membershipType;
+    await user.save();
+    // updat the user as premium customer
+    
+    
+    // if (req.body.event == "payment.captured") { 
+        
+    // }
+    
+    // if (req.body.event == "payment.failed") {
+        
+    // }
+    
+    // return success response from webhook
+    return res.status(200).json(new ApiResponse(200, {}, "web hook recieved successfully"));
+})
+
+export { paymentController, paymentVerifyController };
