@@ -5,5 +5,5 @@ const router = Router();
 
 router.route('/payment/create').post(verifyJwt, paymentController);
 router.route('/payment/webhook').post(paymentWithWebhook);
-router.route('/premium/verify').get(premiumVerify);
+router.route('/premium/verify').get(verifyJwt, premiumVerify);
 export default router;
