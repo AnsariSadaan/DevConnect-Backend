@@ -4,5 +4,5 @@ import { verifyJwt } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.route('/payment/create').post(verifyJwt, paymentController);
-router.route('payment/webhook').post(paymentVerifyController);
+router.route('/payment/webhook').post(paymentVerifyController);
 export default router;
