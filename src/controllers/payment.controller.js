@@ -57,39 +57,101 @@ const paymentController = AsyncHandler(async (req, res) => {
 
 })
 
-const paymentVerifyController = AsyncHandler(async (req, res) => {
-    const webhookSignature = req.get('X-Razorpay-Signature');
-    const isWebhokkValid = validateWebhookSignature(JSON.stringify(req.body), webhookSignature, process.env.RAZORPAY_WEBHOOK_SECRET);
+// const paymentVerifyController = AsyncHandler(async (req, res) => {
+//     const webhookSignature = req.get('X-Razorpay-Signature');
+//     const isWebhokkValid = validateWebhookSignature(JSON.stringify(req.body), webhookSignature, process.env.RAZORPAY_WEBHOOK_SECRET);
 
-    if (!isWebhokkValid) {
+//     if (!isWebhokkValid) {
+//         throw new ApiError(400, "WebHook Signature is invalid");
+//     }
+
+//     console.log(req.body);
+//     const paymentDetails = req.body.payload.payment.entity;
+
+//     //update the payment in db
+//     const payment = await Payment.findOne({orderId: paymentDetails.order_id})
+//     payment.status = paymentDetails.status;
+//     await payment.save();
+
+//     const user = await User.findOne({_id: payment.userId});
+//     user.isPremium = true;
+//     user.membershipType = payment.notes.membershipType;
+//     await user.save();
+//     // updat the user as premium customer
+    
+    
+//     // if (req.body.event == "payment.captured") { 
+        
+//     // }
+    
+//     // if (req.body.event == "payment.failed") {
+        
+//     // }
+    
+//     // return success response from webhook
+//     return res.status(200).json(new ApiResponse(200, {}, "web hook recieved successfully"));
+// })
+
+const paymentVerifyController = AsyncHandler(async (req, res) => {
+    console.log("------ Payment Webhook Triggered ------");
+    console.log("Headers:", req.headers);
+    console.log("Raw Body:", req.body);
+
+    const webhookSignature = req.get('X-Razorpay-Signature');
+    console.log("Webhook Signature:", webhookSignature);
+
+    const isWebhookValid = validateWebhookSignature(
+        JSON.stringify(req.body),
+        webhookSignature,
+        process.env.RAZORPAY_WEBHOOK_SECRET
+    );
+    console.log("Is Webhook Valid:", isWebhookValid);
+
+    if (!isWebhookValid) {
+        console.error("❌ Invalid Webhook Signature");
         throw new ApiError(400, "WebHook Signature is invalid");
     }
 
-    console.log(req.body);
-    const paymentDetails = req.body.payload.payment.entity;
+    try {
+        const paymentDetails = req.body.payload.payment.entity;
+        console.log("Payment Details:", paymentDetails);
 
-    //update the payment in db
-    const payment = await Payment.findOne({orderId: paymentDetails.order_id})
-    payment.status = paymentDetails.status;
-    await payment.save();
+        // Find Payment
+        const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
+        console.log("DB Payment Record:", payment);
 
-    const user = await User.findOne({_id: payment.userId});
-    user.isPremium = true;
-    user.membershipType = payment.notes.membershipType;
-    await user.save();
-    // updat the user as premium customer
-    
-    
-    // if (req.body.event == "payment.captured") { 
-        
-    // }
-    
-    // if (req.body.event == "payment.failed") {
-        
-    // }
-    
-    // return success response from webhook
-    return res.status(200).json(new ApiResponse(200, {}, "web hook recieved successfully"));
-})
+        if (!payment) {
+            console.error("❌ Payment record not found for order:", paymentDetails.order_id);
+            throw new ApiError(404, "Payment record not found");
+        }
+
+        payment.status = paymentDetails.status;
+        await payment.save();
+        console.log("✅ Payment Updated:", payment);
+
+        // Find User
+        const user = await User.findOne({ _id: payment.userId });
+        console.log("DB User Record:", user);
+
+        if (!user) {
+            console.error("❌ User not found for payment:", payment.userId);
+            throw new ApiError(404, "User not found");
+        }
+
+        user.isPremium = true;
+        user.membershipType = payment.notes?.membershipType || "default";
+        await user.save();
+        console.log("✅ User Updated:", user);
+
+        // Optional event logging
+        console.log("Event Type:", req.body.event);
+
+        return res.status(200).json(new ApiResponse(200, {}, "Webhook received successfully"));
+    } catch (err) {
+        console.error("❌ Error in Payment Webhook Handler:", err);
+        throw err;
+    }
+});
+
 
 export { paymentController, paymentVerifyController };
