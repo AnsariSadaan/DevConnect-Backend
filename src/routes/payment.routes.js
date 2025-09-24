@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { paymentController, paymentVerifyController, premiumVerify } from "../controllers/payment.controller.js";
+import { paymentController, paymentWithWebhook, premiumVerify } from "../controllers/payment.controller.js";
 import { verifyJwt } from "../middlewares/auth.middleware.js";
 const router = Router();
 
