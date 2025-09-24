@@ -78,21 +78,21 @@ const paymentController = AsyncHandler(async (req, res) => {
 //     user.membershipType = payment.notes.membershipType;
 //     await user.save();
 //     // updat the user as premium customer
-    
-    
+
+
 //     // if (req.body.event == "payment.captured") { 
-        
+
 //     // }
-    
+
 //     // if (req.body.event == "payment.failed") {
-        
+
 //     // }
-    
+
 //     // return success response from webhook
 //     return res.status(200).json(new ApiResponse(200, {}, "web hook recieved successfully"));
 // })
 
-const paymentVerifyController = AsyncHandler(async (req, res) => {
+const paymentWithWebhook = AsyncHandler(async (req, res) => {
     console.log("------ Payment Webhook Triggered ------");
     console.log("Headers:", req.headers);
     console.log("Raw Body:", req.body);
@@ -153,5 +153,12 @@ const paymentVerifyController = AsyncHandler(async (req, res) => {
     }
 });
 
+const premiumVerify = AsyncHandler(async (req, res) => {
+    const user = req.user;
+    if (user.isPremium) {
+        return res.json({isPremium: true});
+    }
+    return res.json({isPremium: false});
+});
 
-export { paymentController, paymentVerifyController };
+export { paymentController, paymentWithWebhook, premiumVerify };
