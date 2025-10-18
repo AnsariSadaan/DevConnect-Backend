@@ -1,4 +1,4 @@
-import app from './app.js';
+import { server } from './app.js';
 import connectDb from './config/database.js';
 import dotenv from 'dotenv';
 
@@ -8,7 +8,7 @@ dotenv.config({
 
 connectDb()
     .then(() => {
-        app.listen(process.env.PORT, () => {
+        server.listen(process.env.PORT, () => {
             console.log(`Server is running on port no ${process.env.PORT}`)
         });
     })

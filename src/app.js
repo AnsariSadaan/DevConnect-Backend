@@ -7,11 +7,13 @@ import paymentRouter from './routes/payment.routes.js';
 import requestSendReceiveRouter from './routes/request.routes.js';
 import cookieParser from 'cookie-parser';
 import './utils/Cronjob.js';
+import http from 'http';
+import initializeSocket from './config/socketConnection.js';
 
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: ["http://localhost:5173", "*"],
     credentials: true,
 }));
 
@@ -28,8 +30,8 @@ app.use('/api', userFeedRouter);
 app.use('/api', requestSendReceiveRouter);
 app.use('/api', paymentRouter);
 
-
-
+export const server = http.createServer(app);
+initializeSocket(server);
 // Global Error Handler
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
