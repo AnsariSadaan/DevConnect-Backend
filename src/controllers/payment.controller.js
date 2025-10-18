@@ -29,7 +29,6 @@ const paymentController = AsyncHandler(async (req, res) => {
         },
     })
 
-    console.log(order);
     const { id: orderId, status, amount, currency, receipt, notes } = order
     const payment = new Payment({
         userId: req.user._id,
@@ -58,9 +57,7 @@ const paymentController = AsyncHandler(async (req, res) => {
 })
 
 const paymentWithWebhook = AsyncHandler(async (req, res) => {
-    console.log("web hook called");
     const webhookSignature = req.get('X-Razorpay-Signature');
-    console.log("Webhook Signature", webhookSignature);
 
     const isWebhokkValid = validateWebhookSignature(
         JSON.stringify(req.body), 

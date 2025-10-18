@@ -5,7 +5,6 @@ import { validateEditProfileData } from "../utils/Validation.js";
 
 const Profile = AsyncHandler(async (req, res)=> {
     const user = req.user;
-    console.log(user);
     if(!user){
         throw new ApiError(401, "Unauthorized access - user not found")
     }

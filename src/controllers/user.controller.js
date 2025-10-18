@@ -66,7 +66,7 @@ const userConnection = AsyncHandler(async (req, res) => {
         .populate("fromUserId", USER_SAFE_DATA)
         .populate("toUserId", USER_SAFE_DATA);
 
-    console.log(connectionRequests);
+    // console.log(connectionRequests);
     if (!connectionRequests || connectionRequests.length === 0) {
         throw new ApiError(404, "No connections found");
     }

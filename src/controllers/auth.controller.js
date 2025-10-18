@@ -14,7 +14,6 @@ const Signup = AsyncHandler(async (req, res) => {
 
     //encrypt the password
     const passwordHash = await bcrypt.hash(password, 10);
-    // console.log(passwordHash);
 
     //create new user 
     const user = new User({
@@ -30,7 +29,6 @@ const Signup = AsyncHandler(async (req, res) => {
         throw new ApiError(500, "Something went wrong while registering user");
     }
     const token = await savedUser.getJWT();
-    // console.log(token)
     res.cookie("token", token, {
         expires: new Date(Date.now() + 8 * 3600000)
     });
