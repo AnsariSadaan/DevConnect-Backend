@@ -5,6 +5,7 @@ import userProfileRouter from './routes/profile.routes.js';
 import userFeedRouter from './routes/user.routes.js';
 import paymentRouter from './routes/payment.routes.js';
 import requestSendReceiveRouter from './routes/request.routes.js';
+import chatRouter from './routes/chat.routes.js';
 import cookieParser from 'cookie-parser';
 import './utils/Cronjob.js';
 import http from 'http';
@@ -29,6 +30,7 @@ app.use('/api', userProfileRouter);
 app.use('/api', userFeedRouter);
 app.use('/api', requestSendReceiveRouter);
 app.use('/api', paymentRouter);
+app.use('/api', chatRouter);
 
 export const server = http.createServer(app);
 initializeSocket(server);
